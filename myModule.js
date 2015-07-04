@@ -3,12 +3,15 @@ module.exports = function myFilteredLsModule (dirName, extension, callback) {
     data,
     err;
 
-  data = fs.readdir(dirName, function readdirCallback (err, data) {
-    data.filter(function (filename) {
-    	console.log(filename);
-      return filename.match('.' + extension);
-    })
-  });
+  fs.readdir(dirName, function readdirCallback (err, data) {
+    if (err) {
+      return callback(err);
+    }
 
-  callback(err, data);
-}
+    var result = data.filter(function (filename) {
+      return filename.match('.' + extension);
+    });
+
+    callback(null, result);
+  });
+};
